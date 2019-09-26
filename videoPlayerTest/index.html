@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Video Player</title>
+ <link rel="stylesheet" type="text/css" href="style.css">
+
+</head>
+<body>
+<!--
+  <div id="video-controls" class="controls" data-state="hidden">
+    <video id="video" controls preload="metadata" >
+     <source src="looppi.mp4" type="video/mp4">
+    </video>
+    <object type="application/x-shockwave-flash" data="looppi.mp4" width="1024" height="576">
+             <param name="movie" value="flash-player.swf?videoUrl=video/tears-of-steel-battle-clip-medium.mp4" />
+             <param name="allowfullscreen" value="true" />
+             <param name="wmode" value="transparent" />
+    </object>
+  </div>
+  <ul id="video-controls" class="controls">
+   <li><button id="playpause" type="button">Play/Pause</button></li>
+   <li><button id="stop" type="button">Stop</button></li>
+   <li class="progress">
+      <progress id="progress" value="0" min="0">
+         <span id="progress-bar"></span>
+      </progress>
+   </li>
+   <li><button id="mute" type="button">Mute/Unmute</button></li>
+   <li><button id="volinc" type="button">Vol+</button></li>
+   <li><button id="voldec" type="button">Vol-</button></li>
+   <li><button id="fs" type="button">Fullscreen</button></li>
+</ul>-->
+<figure id="videoContainer">
+<!--<div id="video-controls" class="controls" data-state="hidden">-->
+  <video id="video" controls preload="metadata" width="1440" height="1080" >
+   <source src="looppi.mp4" type="video/mp4">
+  </video>
+
+ </div>
+
+<ul id="video-controls" class="controls">
+ <li><button id="playpause" type="button">Play/Pause</button></li>
+ <li><button id="stop" type="button">Stop</button></li>
+ <li class="progress">
+    <progress id="progress" value="0" min="0">
+       <span id="progress-bar"></span>
+    </progress>
+ </li>
+ <li><button id="mute" type="button">Mute/Unmute</button></li>
+ <li><button id="volinc" type="button">Vol+</button></li>
+ <li><button id="voldec" type="button">Vol-</button></li>
+ <li><button id="fs" type="button">Fullscreen</button></li>
+</ul>
+
+
+<!--
+<div id="video-controls" class="controls" data-state="hidden">
+			<button id="playpause" type="button" data-state="play">Play/Pause</button>
+			<button id="stop" type="button" data-state="stop">Stop</button>
+			<div class="progress">
+				<progress id="progress" value="0" min="0">
+					<span id="progress-bar"></span>
+				</progress>
+			</div>
+			<button id="mute" type="button" data-state="mute">Mute/Unmute</button>
+			<button id="volinc" type="button" data-state="volup">Vol+</button>
+			<button id="voldec" type="button" data-state="voldown">Vol-</button>
+			<button id="fs" type="button" data-state="go-fullscreen">Fullscreen</button>
+		</div>-->
+
+
+</figure>
+<script type="text/javascript">
+  var videoContainer = document.getElementById('videoContainer');
+  var video = document.getElementById('video');
+  var videoControls = document.getElementById('video-controls');
+
+  // Hide the default controls
+  video.controls = false;
+
+  // Display the user defined video controls
+  videoControls.style.display = 'block';
+
+  var playpause = document.getElementById('playpause');
+var stop = document.getElementById('stop');
+var mute = document.getElementById('mute');
+var volinc = document.getElementById('volinc');
+var voldec = document.getElementById('voldec');
+var progress = document.getElementById('progress');
+var progressBar = document.getElementById('progress-bar');
+var fullscreen = document.getElementById('fs');
+
+playpause.addEventListener('click', function(e) {
+   if (video.paused || video.ended) video.play();
+   else video.pause();
+});
+
+stop.addEventListener('click', function(e) {
+   video.pause();
+   video.currentTime = 0;
+   progress.value = 0;
+});
+
+mute.addEventListener('click', function(e) {
+   video.muted = !video.muted;
+});
+
+volinc.addEventListener('click', function(e) {
+   alterVolume('+');
+});
+voldec.addEventListener('click', function(e) {
+   alterVolume('-');
+});
+
+var alterVolume = function(dir) {
+   var currentVolume = Math.floor(video.volume * 10) / 10;
+   if (dir === '+') {
+      if (currentVolume < 1) video.volume += 0.1;
+   }
+   else if (dir === '-') {
+      if (currentVolume > 0) video.volume -= 0.1;
+   }
+}
+
+video.addEventListener('timeupdate', function() {
+   progress.value = video.currentTime;
+   progressBar.style.width = Math.floor((video.currentTime / video.duration) * 100) + '%';
+});
+
+video.addEventListener('timeupdate', function() {
+   if (!progress.getAttribute('max')) progress.setAttribute('max', video.duration);
+   progress.value = video.currentTime;
+   progressBar.style.width = Math.floor((video.currentTime / video.duration) * 100) + '%';
+});
+
+progress.addEventListener('click', function(e) {
+   var pos = (e.pageX  - this.offsetLeft) / this.offsetWidth;
+   video.currentTime = pos * video.duration;
+});
+
+/*
+video.style.width = "100%";
+video.style.height = "100%";
+*/
+///FULL screen
+
+var fullScreenEnabled = !!(document.fullscreenEnabled || document.mozFullScreenEnabled || document.msFullscreenEnabled || document.webkitSupportsFullscreen || document.webkitFullscreenEnabled || document.createElement('video').webkitRequestFullScreen);
+
+if (!fullScreenEnabled) {
+   fullscreen.style.display = 'none';
+}
+
+var isFullScreen = function() {
+   return !!(document.fullScreen || document.webkitIsFullScreen || document.mozFullScreen || document.msFullscreenElement || document.fullscreenElement);
+}
+
+var handleFullscreen = function() {
+   if (isFullScreen()) {
+      if (document.exitFullscreen) document.exitFullscreen();
+      else if (document.mozCancelFullScreen) document.mozCancelFullScreen();
+      else if (document.webkitCancelFullScreen) document.webkitCancelFullScreen();
+      else if (document.msExitFullscreen) document.msExitFullscreen();
+      setFullscreenData(false);
+   }
+   else {
+      if (videoContainer.requestFullscreen) videoContainer.requestFullscreen();
+      else if (videoContainer.mozRequestFullScreen) videoContainer.mozRequestFullScreen();
+      else if (videoContainer.webkitRequestFullScreen) videoContainer.webkitRequestFullScreen();
+      else if (videoContainer.msRequestFullscreen) videoContainer.msRequestFullscreen();
+      setFullscreenData(true);
+   }
+}
+
+fullscreen.addEventListener('click', function(e) {
+   handleFullscreen();
+});
+
+var setFullscreenData = function(state) {
+   videoContainer.setAttribute('data-fullscreen', !!state);
+}
+
+document.addEventListener('fullscreenchange', function(e) {
+   setFullscreenData(!!(document.fullScreen || document.fullscreenElement));
+});
+document.addEventListener('webkitfullscreenchange', function() {
+   setFullscreenData(!!document.webkitIsFullScreen);
+});
+document.addEventListener('mozfullscreenchange', function() {
+   setFullscreenData(!!document.mozFullScreen);
+});
+document.addEventListener('msfullscreenchange', function() {
+   setFullscreenData(!!document.msFullscreenElement);
+});
+
+/*
+// Display the user defined video controls
+videoControls.setAttribute('data-state', 'visible');
+
+var supportsProgress = (document.createElement('progress').max !== undefined);
+if (!supportsProgress) progress.setAttribute('data-state', 'fake');
+
+var changeButtonState = function(type) {
+   // Play/Pause button
+   if (type == 'playpause') {
+      if (video.paused || video.ended) {
+         playpause.setAttribute('data-state', 'play');
+      }
+      else {
+         playpause.setAttribute('data-state', 'pause');
+      }
+   }
+   // Mute button
+   else if (type == 'mute') {
+      mute.setAttribute('data-state', video.muted ? 'unmute' : 'mute');
+   }
+}
+
+video.addEventListener('play', function() {
+   changeButtonState('playpause');
+}, false);
+video.addEventListener('pause', function() {
+   changeButtonState('playpause');
+}, false);
+stop.addEventListener('click', function(e) {
+   video.pause();
+   video.currentTime = 0;
+   progress.value = 0;
+   // Update the play/pause button's 'data-state' which allows the correct button image to be set via CSS
+   changeButtonState('playpause');
+});
+mute.addEventListener('click', function(e) {
+   video.muted = !video.muted;
+   changeButtonState('mute');
+});*/
+
+</script>
+
+</body>
+</html>
+
+
+
+         <!--
+         <button id="playpause" type="button" data-state="play">Play/Pause</button>
+         <button id="stop" type="button" data-state="stop">Stop</button>
+         <div class="progress">
+            <progress id="progress" value="0" min="0">
+               <span id="progress-bar"></span>
+            </progress>
+         </div>
+         <button id="mute" type="button" data-state="mute">Mute/Unmute</button>
+         <button id="volinc" type="button" data-state="volup">Vol+</button>
+         <button id="voldec" type="button" data-state="voldown">Vol-</button>
+         <button id="fs" type="button" data-state="go-fullscreen">Fullscreen</button>
+         -->
