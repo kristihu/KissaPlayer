@@ -3,6 +3,7 @@
 <head>
 <title>Video Player</title>
  <link rel="stylesheet" type="text/css" href="style.css">
+
  <!--
  <meta name="viewport" content="width=device-width, initial-scale=1">
      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -29,6 +30,12 @@
     </progress>
  </li>
  <li><button id="mute" type="button">M</button></li>
+ <li>
+  <button id="volume-button">VOL</button>
+  <progress id="progress-volume" value="0" min="0">
+     <span id="progress-bar-volume"></span>
+  </progress>
+ </li>
  <li><button id="volinc" type="button">+</button></li>
  <li><button id="voldec" type="button">-</button></li>
  <li><button id="fs" type="button">	&#xe140;</button></li>
@@ -59,16 +66,22 @@ const fullscreen = document.getElementById('fs');
 const videotime = document.getElementById('video-time');
 const videoduration = document.getElementById('video-duration');
 
+const volume = document.getElementById('volume-button');
+const volumeProgress = document.getElementById('progress-volume');
+const volumeProgressBar  = document.getElementById('progress-bar-volume');
+
 playpause.addEventListener('click', function(e) {
    if (video.paused || video.ended) video.play();
    else video.pause();
 });
 
 
+const getDuration = function() {
+
 let s = video.duration.toString();
 s = s.substring(0, s.indexOf('.'));
 console.log("s: "+s+" ,"+video.duration);
-videoduration.innerHTML = s;
+
 
 let currentTime = s;
 
@@ -77,11 +90,36 @@ if(s <10){
 }else{
   currentTime = "00:"+s;
 }
+videoduration.innerHTML = currentTime;
+}
+
+const getCurrentTime = function(){
+  let s = video.currentTime.toString();
+
+  if(s != 0){
+
+  s = s.substring(0, s.indexOf('.'));
+
+  let currentTime = s;
+
+  if(s <10){
+    currentTime = "00:0"+s+"/";
+  }else{
+    currentTime = "00:"+s+"/";
+  }
+  return currentTime;
+  }
+  return "00:00/";
+}
+
+getDuration();
 
 stop.addEventListener('click', function(e) {
    video.pause();
    video.currentTime = 0;
    progress.value = 0;
+   console.log("Stop "+getCurrentTime());
+   videotime.innerHTML = getCurrentTime();
 });
 
 mute.addEventListener('click', function(e) {
@@ -108,7 +146,7 @@ const alterVolume = function(dir) {
 video.addEventListener('timeupdate', function() {
    console.log("currentTime: "+video.currentTime+" , "+video.duration);
    progress.value = video.currentTime;
-   videotime.text = video.currentTime;
+   videotime.innerHTML = getCurrentTime();
    progressBar.style.width = Math.floor((video.currentTime / video.duration) * 100) + '%';
 });
 
@@ -116,20 +154,12 @@ video.addEventListener('timeupdate', function() {
    if (!progress.getAttribute('max')) progress.setAttribute('max', video.duration);
    progress.value = video.currentTime;
 
-   let s = video.currentTime.toString();
-   s = s.substring(0, s.indexOf('.'));
-   console.log("s: "+s);
-
-   let currentTime = s;
-
-   if(s <10){
-     currentTime = "00:0"+s+"/";
-   }else{
-     currentTime = "00:"+s+"/";
-   }
+   volumeProgressBar.style.width = Math.floor((video.currentTime / video.duration) * 100) + '%';
 
 
-   videotime.innerHTML = currentTime;
+   getDuration();
+
+   videotime.innerHTML = getCurrentTime();
    progressBar.style.width = Math.floor((video.currentTime / video.duration) * 100) + '%';
 });
 
@@ -138,10 +168,6 @@ progress.addEventListener('click', function(e) {
    video.currentTime = pos * video.duration;
 });
 
-/*
-video.style.width = "100%";
-video.style.height = "100%";
-*/
 ///FULL screen
 
 const fullScreenEnabled = !!(document.fullscreenEnabled || document.mozFullScreenEnabled || document.msFullscreenEnabled || document.webkitSupportsFullscreen || document.webkitFullscreenEnabled || document.createElement('video').webkitRequestFullScreen);
