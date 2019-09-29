@@ -39,6 +39,8 @@ video.addEventListener('timeupdate', function () {
 
     convertTime(Math.round(video.currentTime));
 
+    changeVolume();
+
     progressBar.style.width = Math.floor((video.currentTime / video.duration) * 100) + '%';
 });
 
@@ -68,7 +70,7 @@ function totalTime(seconds) {
     currentTime.textContent += " / " + min + ":" + sec;
 }
 
-function changeVolume() {
+function changeVolume() {  
 
     video.volume = volumeSlider.value;
 
@@ -123,9 +125,6 @@ const handleFullscreen = function () {
         setFullscreenData(false);  
     }
     else {
-        if (video.getAttribute('width') === null) {
-            console.log("nulll");
-        }
         if (videoContainer.requestFullscreen) videoContainer.requestFullscreen();
         else if (videoContainer.mozRequestFullScreen) videoContainer.mozRequestFullScreen();
         else if (videoContainer.webkitRequestFullScreen) videoContainer.webkitRequestFullScreen();
