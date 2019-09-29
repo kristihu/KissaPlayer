@@ -8,7 +8,7 @@
 
     <div id="main">
         <div id="videoPanel">
-            <video id="myVideo" width="625" height="400" src="Pexels%20Videos%204703.mp4"></video>
+            <video id="myVideo" width="625" height="400" src="akvaario.mp4"></video>
         </div>
 
         <div id="controls">
@@ -25,13 +25,16 @@
                         <img src="Play.png" onclick="playOrPause()" id="playBtn" />
                     </td>
                     <td width="30%">
-                        <img src="Play.png" onclick="stop()" id="stopBtn" />
+                        <img src="Play.png" id="stopBtn" />
                     </td>
                     <td>
                         <img src="Speaker.png" id="speaker" alt="Speaker" />
                     </td>
                     <td>
                         <label for="volume"></label><input type="range" id="volume" min="0" max="1" value="0.20" step="0.10" onchange="changeVolume()" />
+                    </td>
+                    <td width="30%">
+                        <img src="Play.png" id="fs" />
                     </td>
                 </tr>
             </table>
