@@ -1,5 +1,7 @@
 const videoContainer = document.getElementById('main');
 
+const controls = document.getElementById('controls');
+
 const video = document.getElementById('myVideo');
 
 const stopBtn = document.getElementById('stopBtn');
@@ -85,6 +87,13 @@ function changeVolume() {
 
 const fullScreenEnabled = !!(document.fullscreenEnabled || document.mozFullScreenEnabled || document.msFullscreenEnabled || document.webkitSupportsFullscreen || document.webkitFullscreenEnabled || document.createElement('video').webkitRequestFullScreen);
 
+const exitHandler = function () {
+    if (!document.fullscreenElement && !document.webkitIsFullScreen && !document.mozFullScreen && !document.msFullscreenElement) {
+        setVideoHeightAndWidthToNormal();
+        controls.style.display = "block";
+    }
+}  
+
 document.addEventListener('fullscreenchange', exitHandler);
 document.addEventListener('webkitfullscreenchange', exitHandler);
 document.addEventListener('mozfullscreenchange', exitHandler);
@@ -100,11 +109,27 @@ const setVideoHeightAndWidthToNormal = function () {
     video.setAttribute('height', '400');
 }
 
-function exitHandler() {
-    if (!document.fullscreenElement && !document.webkitIsFullScreen && !document.mozFullScreen && !document.msFullscreenElement) {
-        setVideoHeightAndWidthToNormal();
-    }
-}  
+const hideMouse = function () {
+   // setTimeout(function () {
+   //     controls.style.display = "none";
+  //  }, 3000);
+    let timeout = null;
+
+    $(document).on('mousemove', function () {
+        if (timeout !== null) {
+            $("#controls").fadeIn("fast");
+            console.log("controls näkyviin");
+            clearTimeout(timeout);
+        }
+
+        timeout = setTimeout(function () {
+            console.log("piilota controlost");
+            $("#controls").fadeOut("slow");
+        }, 2000);
+    });
+}
+
+
 
 if (!fullScreenEnabled) {
     fullscreen.style.display = 'none';
@@ -131,6 +156,7 @@ const handleFullscreen = function () {
         else if (videoContainer.msRequestFullscreen) videoContainer.msRequestFullscreen();
         setVideoHeightAndWidthToFull();
         setFullscreenData(true);
+        hideMouse();
     }
 }
 
