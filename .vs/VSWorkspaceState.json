@@ -1,0 +1,22 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\kissa-sivy",
+    "\\kissa-sivy\\node_modules\\optimize-css-assets-webpack-plugin",
+    "\\kissa-sivy\\node_modules\\optimize-css-assets-webpack-plugin\\test",
+    "\\kissa-sivy\\node_modules\\optimize-css-assets-webpack-plugin\\test\\cases",
+    "\\kissa-sivy\\node_modules\\optimize-css-assets-webpack-plugin\\test\\cases\\assetNameRegExp-no-source",
+    "\\kissa-sivy\\node_modules\\react-scripts",
+    "\\kissa-sivy\\node_modules\\react-scripts\\config",
+    "\\kissa-sivy\\node_modules\\webpack-dev-server",
+    "\\kissa-sivy\\node_modules\\webpack-dev-server\\client",
+    "\\kissa-sivy\\node_modules\\webpack\\node_modules\\acorn",
+    "\\kissa-sivy\\public",
+    "\\kissa-sivy\\public\\Js",
+    "\\kissa-sivy\\public\\Media",
+    "\\kissa-sivy\\src",
+    "\\kissa-sivy\\src\\custom_videoplayer"
+  ],
+  "SelectedNode": "\\kissa-sivy\\src\\custom_videoplayer\\video.html",
+  "PreviewInSolutionExplorer": false
+}

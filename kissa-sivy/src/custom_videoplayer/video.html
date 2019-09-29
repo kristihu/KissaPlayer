@@ -1,12 +1,19 @@
 <html>
 <head>
     <link href="Main.css" rel="stylesheet" />
-    <!-- <script src="jquery-1.10.2.min.js"></script> -->
+    <!-- <script src="jquery-1.10.2.min.js"></script>-->
+    <script>
+        function reload_js(src) {
+            $('script[src="' + src + '"]').remove();
+            $('<script>').attr('src', src).appendTo('head');
+        }
+        reload_js('/Js/main.js');
+    </script>
 </head>
 <body>
     <div id="main">
         <div id="videoPanel">
-            <video id="myVideo" width="625" height="400" src="/Media/looppivuori.mp4"></video>
+            <video id="myVideo" width="625" height="400" ></video>
         </div>
 
         <div id="controls">

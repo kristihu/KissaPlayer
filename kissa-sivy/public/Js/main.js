@@ -33,7 +33,9 @@ function stop() {
     progress.value = 0;
 }
 
-stopBtn.addEventListener('click', stop);
+//try {
+    console.log("onnistuu laittamaan eventlistenerin");
+    stopBtn.addEventListener('click', stop);
 
 video.addEventListener('timeupdate', function () {
     if (!progress.getAttribute('max')) progress.setAttribute('max', video.duration);
@@ -50,7 +52,11 @@ progress.addEventListener('click', function (e) {
     var percent = e.offsetX / this.offsetWidth;
     progress.value = percent / 100;
     video.currentTime = percent * video.duration;
-});
+    });
+
+//} catch (err) {
+//    console.log(err);
+//}
 
 function convertTime(seconds) {
     let min = Math.floor(seconds / 60);
@@ -160,14 +166,20 @@ const handleFullscreen = function () {
     }
 }
 
+//try {
 fullscreen.addEventListener('click', function (e) {
     handleFullscreen();
 });
+
+//} catch (err) {
+ //   console.log(err);
+//}
 
 const setFullscreenData = function (state) {
     videoContainer.setAttribute('data-fullscreen', !!state);
 }
 
+//try {
 document.addEventListener('fullscreenchange', function (e) {
     setFullscreenData(!!(document.fullScreen || document.fullscreenElement));
 });
@@ -180,7 +192,9 @@ document.addEventListener('mozfullscreenchange', function () {
 document.addEventListener('msfullscreenchange', function () {
     setFullscreenData(!!document.msFullscreenElement);
 });
-
+//} catch (err) {
+//    console.log(err);
+//}
 
 
 
