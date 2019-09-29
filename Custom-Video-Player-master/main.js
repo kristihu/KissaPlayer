@@ -9,7 +9,6 @@ const progress = document.getElementById('progress');
 const progressBar = document.getElementById('progress-bar');
 
 
-
 function playOrPause(){
     
     if(video.paused){
@@ -30,32 +29,19 @@ function stop() {
 }
 
 video.addEventListener('timeupdate', function () {
-   
-    progress.value = video.currentTime;
-
-    progressBar.style.width = Math.floor((video.currentTime / video.duration) * 100) + '%';
-
-    convertTime(Math.round(video.currentTime));  //convert decimal no into intiger
-
-   
-});
-
-
-
-video.addEventListener('timeupdate', function () {
     if (!progress.getAttribute('max')) progress.setAttribute('max', video.duration);
     progress.value = video.currentTime;
 
+    convertTime(Math.round(video.currentTime));
+
     progressBar.style.width = Math.floor((video.currentTime / video.duration) * 100) + '%';
 });
 
-
 progress.addEventListener('click', function (e) {
-    const pos = (e.pageX - this.offsetLeft) / this.offsetWidth;
-    console.log("pos: ", pos + " video.duration: ", video.duration);
-    video.currentTime = pos * video.duration;
+    var percent = e.offsetX / this.offsetWidth;
+    progress.value = percent / 100;
+    video.currentTime = percent * video.duration;
 });
-
 
 function convertTime(seconds)
         {
