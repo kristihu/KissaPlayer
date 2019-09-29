@@ -1,36 +1,61 @@
-const vid = document.getElementById('myVideo');
-
-const fillBar = document.getElementById('fill');
+const video = document.getElementById('myVideo');
 
 const currentTime = document.getElementById('currentTime');
 
 const volumeSlider = document.getElementById('volume');
 
+const progress = document.getElementById('progress');
+
+const progressBar = document.getElementById('progress-bar');
+
+
 
 function playOrPause(){
     
-    if(vid.paused){
-        vid.play();
+    if(video.paused){
+        video.play();
         $("#playBtn").attr("src","Pause.png");
     }
     else{
-        vid.pause();
+        video.pause();
         $("#playBtn").attr("src","Play.png");
     }
 }
 
-vid.addEventListener('timeupdate',function(){
+function stop() {
 
-    const position = vid.currentTime / vid.duration;
+    video.pause();
+    video.currentTime = 0;
+    progress.value = 0;
+}
 
-    fillBar.style.width = position * 100 +'%';
-    
-    convertTime(Math.round(vid.currentTime));  //convert decimal no into intiger
-    
-    if(vid.ended){
-        $("#playBtn").attr("src","Play.png");
-    }
+video.addEventListener('timeupdate', function () {
+   
+    progress.value = video.currentTime;
+
+    progressBar.style.width = Math.floor((video.currentTime / video.duration) * 100) + '%';
+
+    convertTime(Math.round(video.currentTime));  //convert decimal no into intiger
+
+   
 });
+
+
+
+video.addEventListener('timeupdate', function () {
+    if (!progress.getAttribute('max')) progress.setAttribute('max', video.duration);
+    progress.value = video.currentTime;
+
+    progressBar.style.width = Math.floor((video.currentTime / video.duration) * 100) + '%';
+});
+
+
+progress.addEventListener('click', function (e) {
+    const pos = (e.pageX - this.offsetLeft) / this.offsetWidth;
+    console.log("pos: ", pos + " video.duration: ", video.duration);
+    video.currentTime = pos * video.duration;
+});
+
 
 function convertTime(seconds)
         {
@@ -41,7 +66,7 @@ function convertTime(seconds)
             sec = (sec < 10) ? "0" + sec : sec;
             currentTime.textContent = min + ":" + sec;
             
-            totalTime(Math.round(vid.duration));
+            totalTime(Math.round(video.duration));
         }
         
         function totalTime(seconds)
@@ -57,7 +82,7 @@ function convertTime(seconds)
 
 function changeVolume(){
     
-    vid.volume = volumeSlider.value;
+    video.volume = volumeSlider.value;
     
     if(volumeSlider.value == 0){
         

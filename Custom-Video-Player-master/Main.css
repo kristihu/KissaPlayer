@@ -42,9 +42,10 @@ body{
     top:0px;
     left: 0px;
 }
-#fill{
+#progress {
     height: 10px;
     background-color: #DBA74A;
+    width: 100%;
 }
 #currentTime{
     font-family: monospace;
