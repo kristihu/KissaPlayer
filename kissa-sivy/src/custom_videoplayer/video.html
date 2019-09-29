@@ -1,0 +1,42 @@
+<html>
+<head>
+    <link href="Main.css" rel="stylesheet" />
+    <!-- <script src="jquery-1.10.2.min.js"></script> -->
+</head>
+<body>
+    <div id="main">
+        <div id="videoPanel">
+            <video id="myVideo" width="625" height="400" src="/Media/looppivuori.mp4"></video>
+        </div>
+
+        <div id="controls">
+            <progress id="progress" value="0" min="0">
+                <span id="progress-bar"></span>
+            </progress>
+
+            <table>
+                <tr>
+                    <td width="55%">
+                        <div id="currentTime">00:00 / 00:00</div>
+                    </td>
+                    <td width="30%">
+                        <img src="/Media/Play.png" onclick="playOrPause()" id="playBtn" />
+                    </td>
+                    <td width="30%">
+                        <img src="/Media/Play.png" id="stopBtn" />
+                    </td>
+                    <td>
+                        <img src="/Media/Speaker.png" id="speaker" alt="Speaker" />
+                    </td>
+                    <td>
+                        <label for="volume"></label><input type="range" id="volume" min="0" max="1" value="0.20" step="0.10" onchange="changeVolume()" />
+                    </td>
+                    <td width="30%">
+                        <img src="/Media/Play.png" id="fs" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
