@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import Page from './custom_videoplayer/video.html';
 import style from './custom_videoplayer/Main.css';
@@ -27,7 +26,6 @@ class App extends Component {
         return (
             <React.Fragment>
                 <div style={style} dangerouslySetInnerHTML={htmlDoc} />
-
             </React.Fragment>
         );
     }
