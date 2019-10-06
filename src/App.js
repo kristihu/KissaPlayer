@@ -35,11 +35,18 @@ class App extends Component {
             Videos: [],
             vidit: vidit,
             haku: '',
+            renderSideWidget: false,
+            fetching: false,
+            lockAll: false,
         };
         this.searchHandler = this.searchHandler.bind(this);
         this.changeVideo = this.changeVideo.bind(this);
         this.changeVideo2 = this.changeVideo2.bind(this);
         this.thumbnail = this.thumbnail.bind(this);
+        this.addSideWidget = this.addSideWidget.bind(this);
+        this.hideVideo = this.hideVideo.bind(this);
+        this.fetchData = this.fetchData.bind(this);
+        this.lockAll = this.lockAll.bind(this);
         console.log(this.state.vidit)
     }
     searchHandler(event){
@@ -62,33 +69,52 @@ class App extends Component {
 
         document.body.appendChild(script);
         document.body.appendChild(jquery);
-
+        /*
         //Fetchaa videoiden nimet
         fetch('/jsonContent/videos.json').then((response) => {
             return response.json();
         }).then((json) => {
-            console.log("Json:", json);
-
-            /*  for (let i = 0; i < json.length; i++) {
-                  console.log("Json:", json[i].Video);
-                  fetch('/Media/' + json[i].Video).then((response) => {
-                      return response.blob();
-                  }).then((blob) => {
-                      console.log(blob);
-                      json[i].blobData = blob;
-                  });
-              }*/
             this.setState({ Videos: json });
             console.log(this.state);
 
             return json;
         }).
             then((json) => {
-                console.log("Json  2:", json);
                 for (let i = 0; i < json.length; i++) {
-                    this.thumbnail(json[i].Video);
+                    //  this.thumbnail(json[i].Video);
                 }
+                this.setState({ renderSideWidget: true });
+                return json;
+            }).
+            then((json) => {
+           
             });
+*/
+    }
+
+    fetchData() {
+        //Fetchaa videoiden nimet
+        console.log("fetch1");
+        fetch('/jsonContent/videos.json').then((response) => {
+            return response.json();
+        }).then((json) => {
+            this.setState({ Videos: json });
+            console.log(this.state);
+            
+            return json;
+        }).
+            then((json) => {
+                for (let i = 0; i < json.length; i++) {
+                    //  this.thumbnail(json[i].Video);
+                }
+                this.setState({ renderSideWidget: true });
+            });
+    }
+
+    lockAll() {
+        if (this.state.lockAll === false) {
+            this.setState({ fetching: true, lockAll: true });
+        }
     }
 
     thumbnail(videoFromJson) {
@@ -97,9 +123,35 @@ class App extends Component {
         canvas.getContext('2d').drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
     }
 
-    changeVideo() {
+    hideVideo() {
+        for (let i = 0; i < this.state.Videos.length; i++) {
+            const video = document.getElementById(this.state.Videos[i].Video);
+             video.style.display = "none";
+        }
+    }
 
-        this.setState({ video: "Pexels Videos 4703.mp4" });
+    addSideWidget() {
+        
+        console.log("Add sidewidget()",this.state.Videos);
+        for (let i = 0; i < this.state.Videos.length; i++) {
+            const canvas = document.getElementById('canvas' + i);
+            const video = document.getElementById(this.state.Videos[i].Video);
+            console.log(video);
+            console.log(canvas);
+            canvas.getContext('2d').drawImage(video, 0, 0, video.videoWidth / 8, video.videoHeight / 16);
+           // canvas.addEventListener('click', this.changeVideo(this.state.Videos[i].Video));
+            
+        }
+        if (this.state.fetching === false) {
+            this.setState({ fetching: true });
+        }
+    }
+
+    changeVideo(videoName) {
+        console.log("Videoname. ", videoName);
+        return (
+            <Link to={`/${videoName}`} />
+        );
     }
 
     changeVideo2() {
@@ -111,9 +163,20 @@ class App extends Component {
     }
 
     render() {
-        const {haku, vidit} = this.state;
+        const { haku, vidit } = this.state;
+      /*  
+        if (this.state.fetching === false) {
+            { this.fetchData() }
+        } else {
+           // {this.lockAll()}
+        }*/
         return (
             <React.Fragment>
+                  {this.state.fetching === false &&
+                    <React.Fragment>
+                    {this.fetchData()}
+                    </React.Fragment>
+                } 
                 <form><input type="text"
                              onChange={this.searchHandler}
                             value={haku}/></form>
@@ -124,15 +187,13 @@ class App extends Component {
                 }
                 <h2>{this.state.video}</h2>
                 <h3>ebin</h3>
+
                 <Router>
                     <ul>
                         <li><Link to="/" >Home</Link></li>
                         <li><Link onClick={this.changeVideo} to={`/${this.state.video}`} >Pexels Videos</Link></li>
                         <li> <Link onClick={this.changeVideo2} to={`/${this.state.video}`} >Looppivuori</Link></li>
                     </ul>
-                    <div className="sideWidget">
-                        <SideWidget Videos={this.state.Videos} />
-                    </div>
                     <Route exact path="/" render={(props) => (
                         <Home {...props} title={"home"} />
                     )} />
@@ -140,6 +201,14 @@ class App extends Component {
                         <VideoContainer {...props} video={this.state.video} />
                     )} />
                 </Router>
+                <div className="sideWidget">
+                    <SideWidget Videos={this.state.Videos} changeVideo={this.changeVideo} />
+                    {this.state.renderSideWidget === true &&
+                        <div>
+                        {this.addSideWidget()}   
+                        </div>
+                    }
+                </div>
             </React.Fragment>
         );
     }
