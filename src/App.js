@@ -69,27 +69,7 @@ class App extends Component {
 
         document.body.appendChild(script);
         document.body.appendChild(jquery);
-        /*
-        //Fetchaa videoiden nimet
-        fetch('/jsonContent/videos.json').then((response) => {
-            return response.json();
-        }).then((json) => {
-            this.setState({ Videos: json });
-            console.log(this.state);
 
-            return json;
-        }).
-            then((json) => {
-                for (let i = 0; i < json.length; i++) {
-                    //  this.thumbnail(json[i].Video);
-                }
-                this.setState({ renderSideWidget: true });
-                return json;
-            }).
-            then((json) => {
-           
-            });
-*/
     }
 
     fetchData() {
