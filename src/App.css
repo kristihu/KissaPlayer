@@ -26,3 +26,153 @@
     background-color: #eae8e8;
     width: 20%;
 }
+
+body {
+    margin: 0px;
+    padding: 0px;
+    background-image: url(https://wallpaperaccess.com/full/235372.jpg);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    background-color: #464646;
+}
+
+h2 {
+}
+
+#main {
+    width: 602px;
+    height: 350px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    z-index: 9;
+    overflow: hidden;
+    border: 10px inset #ddd;
+}
+
+#videoPanel {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+
+#controls {
+    display: block;
+    height: 40px;
+    width: 97%;
+    padding: 10px;
+    position: absolute;
+    top: 107%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    transition: all .2s;
+}
+
+#main:hover #controls {
+    top: 85%;
+}
+
+#seek-bar {
+    width: 100%;
+    height: 10px;
+    background-color: gray;
+    display: flex;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+#progress {
+    height: 10px;
+    background-color: #DBA74A;
+    width: 100%;
+}
+
+#currentTime {
+    font-family: monospace;
+    font-size: 14px;
+    color: #DBA74A;
+}
+
+#playBtn {
+    cursor: pointer;
+}
+
+input[type=range] {
+    -webkit-appearance: none !important;
+    background-color: #666;
+    height: 4px;
+    border-radius: 4px;
+    outline: none;
+}
+
+    input[type=range]::-webkit-slider-thumb {
+        -webkit-appearance: none !important;
+        background-color: #DBA74A;
+        height: 15px;
+        width: 15px;
+        border-radius: 15px;
+        cursor: pointer;
+    }
+
+#mobileTitle {
+    display: none;
+}
+
+
+@media only screen and (min-width: 300px) and (max-width: 960px) {
+    body {
+        background-image: none;
+    }
+
+    .sideWidget {
+        width: 100%;
+    }
+
+    #mobileTitle {
+        display: block;
+        position: absolute;
+        top: 3.5%;
+        left: 17%;
+        font-family: Arial, sans-serif;
+    }
+
+    #formi {
+        position: absolute;
+        left: 60%;
+        top: 7.5%;
+    }
+
+    #main {
+        width: 50%;
+        height: 50%;
+        display: none;
+    }
+
+    #vidit {
+        display: none;
+    }
+
+    ul {
+        display: none;
+    }
+
+    video {
+        position: relative;
+        left: 10%;
+        top: 20%;
+        display: flex;
+    }
+
+    #mobiiliTeksti {
+        display: none;
+    }
+}
+
+
+
+

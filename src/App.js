@@ -16,9 +16,13 @@ const vidit = [
             vidi: "Pexels Videos 4703.mp4"
     },
 
-
-
 ]
+
+const fakePromise = () =>
+    new Promise((resolve, reject) => {
+        const fakeResult = true;
+        setTimeout(() => resolve(fakeResult), 3000);
+    });
 
 function searchingFor(term){
     return function(x){
@@ -42,20 +46,43 @@ class App extends Component {
             sideWidgetStyle: {
                 "display": "none",
                 "backgroundColor": "red",
-            }
+            },
+            thumbnailsGenerated: "",
+            loading: false,
         };
         this.searchHandler = this.searchHandler.bind(this);
         this.changeVideo = this.changeVideo.bind(this);
-        this.thumbnail = this.thumbnail.bind(this);
         this.addSideWidget = this.addSideWidget.bind(this);
         this.hideVideo = this.hideVideo.bind(this);
         this.fetchData = this.fetchData.bind(this);
         this.renderVideoContainer = this.renderVideoContainer.bind(this);
         this.homePage = this.homePage.bind(this);
-        console.log(this.state.vidit)
+        this.generateThumbnails = this.generateThumbnails.bind(this);
+        this.startAsync = this.startAsync.bind(this);
+      //  console.log(this.state.vidit)
     }
+
     searchHandler(event){
         this.setState({haku: event.target.value})
+    }
+
+
+    startAsync() {
+        this.setState({
+            loading: true
+        });
+
+        fakePromise().then(result =>
+            this.setState({
+                loading: false,
+                result
+            },
+                () => {
+                    console.log("Content loaded");
+                    this.hideVideo();
+                }
+            )
+        );
     }
 
     componentDidMount() {
@@ -74,28 +101,28 @@ class App extends Component {
 
         document.body.appendChild(script);
         document.body.appendChild(jquery);
-
     }
 
     fetchData() {
         //Fetchaa videoiden nimet
-        console.log("fetch1");
+       // console.log("fetch1");
         fetch('/jsonContent/videos.json').then((response) => {
             return response.json();
         }).then((json) => {
-            this.setState({ Videos: json });
-
+            this.setState({ Videos: json});
+         //   console.log("Videos: ", this.state.Videos);
         }).
             then(() => {
                 this.setState({ renderSideWidget: true });
             }).then(() => {
 
                 const sideWidgetElement = document.querySelector(".sideWidget");
-
-                sideWidgetElement.style.display = "none";
+                
+            //    sideWidgetElement.style.display = "none";
 
                 this.setState({ displayThumbnail: true});
-               // this.changeVideo("");
+             //   this.changeVideo("");
+                this.startAsync();
             })
     }
 
@@ -105,12 +132,6 @@ class App extends Component {
         }
     }
 
-    thumbnail(videoFromJson) {
-        const canvas = document.getElementById('canvas');
-        const video = document.getElementById(videoFromJson);
-        canvas.getContext('2d').drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
-    }
-
     hideVideo() {
         for (let i = 0; i < this.state.Videos.length; i++) {
             const video = document.getElementById(this.state.Videos[i].Video);
@@ -118,20 +139,30 @@ class App extends Component {
         }
     }
 
-    addSideWidget() {
-        console.log("add sideWidget()");
-
-        for (let i = 0; i < this.state.Videos.length; i++) {
+    generateThumbnails(videos) {
+        for (let i = 0; i < videos.length; i++) {
+           // console.log(" generateThumbnails Videos ", videos[i]);
             const canvas = document.getElementById('canvas' + i);
-            const video = document.getElementById(this.state.Videos[i].Video);
-       //     console.log("video: ",video);
-       //     console.log("canvas: ",canvas);
+            const video = document.getElementById(videos[i].Video);
+            //     console.log("video: ",video);
+            //     console.log("canvas: ",canvas);
             canvas.getContext('2d').drawImage(video, 0, 0, video.videoWidth / 8, video.videoHeight / 16);
-            
         }
+    }
+
+    addSideWidget() {
+      //  console.log("add sideWidget()");    
+
+
+
         if (this.state.fetching === false) {
-            this.setState({ fetching: true });
+            this.setState({ fetching: true },
+            );
+        } else {
+            this.generateThumbnails(this.state.Videos);
         }
+
+
     }
 
     changeVideo(videoName) {
@@ -140,13 +171,13 @@ class App extends Component {
 
         sideWidgetElement.style.display = "block";
 
-        console.log("videoname " + videoName)
+   //     console.log("videoname " + videoName)
         if (videoName !== "") {
-            console.log("videoName: ", videoName);
+       //     console.log("videoName: ", videoName);
             this.setState({ video: videoName }
                 , () => {
-                    console.log("App video: " + this.state.video);
-                    console.log(this.state.Videos);
+           //         console.log("App video: " + this.state.video);
+           //         console.log(this.state.Videos);
                 },
                 () => {
                     this.setState({ renderVideoContainer: true });
@@ -154,7 +185,7 @@ class App extends Component {
             );
         } else {
             this.setState({ video: "" });
-            console.log("No video");
+        //    console.log("No video");
         }
     }
 
@@ -167,7 +198,6 @@ class App extends Component {
 
 
     render() {
-        const { haku, vidit } = this.state;
 
         return (
             <React.Fragment>
@@ -176,8 +206,6 @@ class App extends Component {
                     {this.fetchData()}
                     </React.Fragment>
                 } 
-
-
 
                 <Router>
                     <ul>
@@ -195,13 +223,10 @@ class App extends Component {
                     <Route exact path="/" render={(props) => (
                         <Home {...props} title={"home"} />
                     )} />
-                    {/*  {this.renderVideoContainer === true && */}
                         <Route path={`/${this.state.video}`} render={(props) => (
                             <VideoContainer {...props} video={this.state.video} />
                      )} /> 
-              {/*   }*/}
-                </Router>
-             
+                </Router>          
             </React.Fragment>
         );
     }

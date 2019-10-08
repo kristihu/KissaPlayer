@@ -24,7 +24,7 @@ class VideoContainer extends Component {
 
     render() {
         if (this.props.video !== "") {
-            console.log("rendering .... " + this.props.video);
+       //     console.log("rendering .... " + this.props.video);
             const video = window.document.getElementById('myVideo');
          //   console.log("video element; ", video);
             try {
