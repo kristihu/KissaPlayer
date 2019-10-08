@@ -4,7 +4,6 @@
      <script src="/Js/jquery-1.10.2.min.js"></script>
     <script>
         function reload_js(src) {
-            console.log("FUNCTION ", src);
             $('script[src="' + src + '"]').remove();
             $('<script>').attr('src', src).appendTo('head');
         }

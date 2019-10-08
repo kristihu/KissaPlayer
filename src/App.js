@@ -1,19 +1,19 @@
 import React, { Component } from 'react';
 import { HashRouter as Router, Route } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import { Redirect } from 'react-router'
 import './App.css';
 import VideoContainer from './Components/VideoContainer';
 import Home from './Views/Home';
 import SideWidget from './Components/SideWidget';
+
 const vidit = [
     {
-            id:"1",
-            vidi: "looppivuori.mp4"
+        id: "1",
+        vidi: "looppivuori.mp4"
     },
     {
-            id:"2",
-            vidi: "Pexels Videos 4703.mp4"
+        id: "2",
+        vidi: "Pexels Videos 4703.mp4"
     },
 
 ]
@@ -21,11 +21,11 @@ const vidit = [
 const fakePromise = () =>
     new Promise((resolve, reject) => {
         const fakeResult = true;
-        setTimeout(() => resolve(fakeResult), 3000);
+        setTimeout(() => resolve(fakeResult), 5000);
     });
 
-function searchingFor(term){
-    return function(x){
+function searchingFor(term) {
+    return function (x) {
         return x.vidi.toLowerCase().includes(term.toLowerCase()) || !term;
     }
 }
@@ -59,11 +59,10 @@ class App extends Component {
         this.homePage = this.homePage.bind(this);
         this.generateThumbnails = this.generateThumbnails.bind(this);
         this.startAsync = this.startAsync.bind(this);
-      //  console.log(this.state.vidit)
     }
 
-    searchHandler(event){
-        this.setState({haku: event.target.value})
+    searchHandler(event) {
+        this.setState({ haku: event.target.value })
     }
 
 
@@ -78,7 +77,6 @@ class App extends Component {
                 result
             },
                 () => {
-                    console.log("Content loaded");
                     this.hideVideo();
                 }
             )
@@ -109,23 +107,15 @@ class App extends Component {
 
     fetchData() {
         //Fetchaa videoiden nimet
-       // console.log("fetch1");
         fetch('/jsonContent/videos.json').then((response) => {
             return response.json();
         }).then((json) => {
             this.setState({ Videos: json });
-            //   console.log("Videos: ", this.state.Videos);
         }).
             then(() => {
                 this.setState({ renderSideWidget: true });
             }).then(() => {
-
-                const sideWidgetElement = document.querySelector(".sideWidget");
-
-                //    sideWidgetElement.style.display = "none";
-
                 this.setState({ displayThumbnail: true });
-                //   this.changeVideo("");
                 this.startAsync();
             });
     }
@@ -139,25 +129,19 @@ class App extends Component {
     hideVideo() {
         for (let i = 0; i < this.state.Videos.length; i++) {
             const video = document.getElementById(this.state.Videos[i].Video);
-             video.style.display = "none";
+            video.style.display = "none";
         }
     }
 
     generateThumbnails(videos) {
         for (let i = 0; i < videos.length; i++) {
-           // console.log(" generateThumbnails Videos ", videos[i]);
             const canvas = document.getElementById('canvas' + i);
             const video = document.getElementById(videos[i].Video);
-            //     console.log("video: ",video);
-            //     console.log("canvas: ",canvas);
-            canvas.getContext('2d').drawImage(video, 0, 0, video.videoWidth / 8, video.videoHeight / 16);
+            canvas.getContext('2d').drawImage(video, 0, 0, 100, 100);
         }
     }
 
     addSideWidget() {
-      //  console.log("add sideWidget()");    
-
-
 
         if (this.state.fetching === false) {
             this.setState({ fetching: true },
@@ -165,8 +149,6 @@ class App extends Component {
         } else {
             this.generateThumbnails(this.state.Videos);
         }
-
-
     }
 
     changeVideo(videoName) {
@@ -175,13 +157,9 @@ class App extends Component {
 
         sideWidgetElement.style.display = "block";
 
-   //     console.log("videoname " + videoName)
         if (videoName !== "") {
-       //     console.log("videoName: ", videoName);
             this.setState({ video: videoName }
                 , () => {
-           //         console.log("App video: " + this.state.video);
-           //         console.log(this.state.Videos);
                 },
                 () => {
                     this.setState({ renderVideoContainer: true });
@@ -189,7 +167,6 @@ class App extends Component {
             );
         } else {
             this.setState({ video: "" });
-        //    console.log("No video");
         }
     }
 
@@ -200,22 +177,25 @@ class App extends Component {
         this.forceUpdate();
     }
 
-
     render() {
 
         return (
             <React.Fragment>
-                  {this.state.fetching === false &&
+                {this.state.fetching === false &&
                     <React.Fragment>
-                    {this.fetchData()}
+                        {this.fetchData()}
                     </React.Fragment>
-                } 
-
+                }
                 <Router>
-                    <ul>
-                        <li><Link onClick={() => this.homePage()} to="/" >Etusivu</Link></li>
-                        <li><Link onClick={() => this.changeVideo("")} to={`/${this.state.video}`} >Katso kissavideoita</Link></li>
-                    </ul>
+                    <div className={"navUl"}>
+                        <ul>
+                            <li><Link onClick={() => this.homePage()} to="/" >Etusivu</Link></li>
+                            <li><Link onClick={() => this.changeVideo("")} to={`/${this.state.video}`} >Katso kissavideoita</Link></li>
+                        </ul>
+                    </div>
+                    <Route path={`/${this.state.video}`} render={(props) => (
+                        <VideoContainer {...props} video={this.state.video} />
+                    )} />
                     <div className="sideWidget">
                         <SideWidget style={this.state.sideWidgetStyle} Videos={this.state.Videos} changeVideo={this.changeVideo} />
                         {this.state.renderSideWidget === true &&
@@ -227,10 +207,7 @@ class App extends Component {
                     <Route exact path="/" render={(props) => (
                         <Home {...props} title={"home"} />
                     )} />
-                        <Route path={`/${this.state.video}`} render={(props) => (
-                            <VideoContainer {...props} video={this.state.video} />
-                     )} /> 
-                </Router>          
+                </Router>
             </React.Fragment>
         );
     }

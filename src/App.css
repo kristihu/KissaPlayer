@@ -1,24 +1,24 @@
 .App {
-  text-align: center;
+    text-align: center;
 }
 
 .App-logo {
-  height: 40vmin;
+    height: 40vmin;
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+    background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
 }
 
 .App-link {
-  color: #09d3ac;
+    color: #09d3ac;
 }
 
 .sideWidget {
@@ -102,6 +102,21 @@ h2 {
     cursor: pointer;
 }
 
+.videoTitleContainer {
+    text-align: center;
+    font-size: 24px;
+    color: #ffeaae;
+}
+
+.homePageContainer {
+    height: 10vh;
+    background-color: #dbd6d6;
+    width: 40%;
+    margin-left: 40%;
+    text-align: center;
+    vertical-align: middle;
+}
+
 input[type=range] {
     -webkit-appearance: none !important;
     background-color: #666;
@@ -131,6 +146,8 @@ input[type=range] {
 
     .sideWidget {
         width: 100%;
+        position: absolute;
+        top: 70%;
     }
 
     #mobileTitle {
@@ -157,9 +174,6 @@ input[type=range] {
         display: none;
     }
 
-    ul {
-        display: none;
-    }
 
     video {
         position: relative;
@@ -171,8 +185,33 @@ input[type=range] {
     #mobiiliTeksti {
         display: none;
     }
+
+    #main {
+        width: 100%;
+        height: 300px;
+        /*  position: absolute;
+        top: 0;
+        left: 0;
+        transform: translate(-50%,-50%);
+        overflow: hidden;
+        border: 10px inset #ddd;*/
+    }
+
+    .navUl {
+        position: relative;
+        top: 10%;
+        height: 10vh;
+        left: 0px;
+        background-color: white;
+        color: #0b0b0b;
+    }
+
+    .homePageContainer {
+        height: 15vh;
+        background-color: #dbd6d6;
+        width: 90%;
+        margin-left: 5%;
+        text-align: center;
+        vertical-align: middle;
+    }
 }
-
-
-
-

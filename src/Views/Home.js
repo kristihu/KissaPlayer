@@ -6,7 +6,9 @@ class Home extends Component {
     render() {
         return (
             <React.Fragment>
-                <p>{this.props.title} {"<- props "}</p>
+                <div className={"homePageContainer"}>
+                    <h1>Tervetuloa Kissa sivulle!</h1>
+                    </div>
             </React.Fragment>
         );
     }

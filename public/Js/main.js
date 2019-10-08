@@ -17,9 +17,6 @@ const fullscreen = document.getElementById('fs');
 
 const speaker = document.getElementById('speaker');
 
-
-
-
 try {
 function mute(){
     if (video.muted === false) {
@@ -37,7 +34,7 @@ function mute(){
 speaker.addEventListener('click', mute)
 
 } catch (err) {
-    console.log("error");
+
 }
 
 try {
@@ -63,11 +60,10 @@ function stop() {
     progress.value = 0;
     }
 } catch (err) {
-    console.log("error");
+
 }
 
 try {
-    console.log("onnistuu laittamaan eventlistenerin");
     stopBtn.addEventListener('click', stop);
 
 video.addEventListener('timeupdate', function () {
@@ -88,7 +84,7 @@ progress.addEventListener('click', function (e) {
     });
 
 } catch (err) {
-    console.log("error");
+
 }
 
 function convertTime(seconds) {
@@ -149,26 +145,20 @@ const setVideoHeightAndWidthToNormal = function () {
 }
 
 const hideMouse = function () {
-   // setTimeout(function () {
-   //     controls.style.display = "none";
-  //  }, 3000);
+
     let timeout = null;
 
     $(document).on('mousemove', function () {
         if (timeout !== null) {
             $("#controls").fadeIn("fast");
-            console.log("controls näkyviin");
             clearTimeout(timeout);
         }
 
         timeout = setTimeout(function () {
-            console.log("piilota controlost");
             $("#controls").fadeOut("slow");
         }, 2000);
     });
 }
-
-
 
 if (!fullScreenEnabled) {
     fullscreen.style.display = 'none';
@@ -199,20 +189,15 @@ const handleFullscreen = function () {
     }
 }
 
-//try {
+
 fullscreen.addEventListener('click', function (e) {
     handleFullscreen();
 });
-
-//} catch (err) {
- //   console.log(err);
-//}
 
 const setFullscreenData = function (state) {
     videoContainer.setAttribute('data-fullscreen', !!state);
 }
 
-//try {
 document.addEventListener('fullscreenchange', function (e) {
     setFullscreenData(!!(document.fullScreen || document.fullscreenElement));
 });
@@ -225,9 +210,6 @@ document.addEventListener('mozfullscreenchange', function () {
 document.addEventListener('msfullscreenchange', function () {
     setFullscreenData(!!document.msFullscreenElement);
 });
-//} catch (err) {
-//    console.log(err);
-//}
 
 
 
