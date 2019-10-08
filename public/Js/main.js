@@ -20,6 +20,7 @@ const speaker = document.getElementById('speaker');
 
 
 
+try {
 function mute(){
     if (video.muted === false) {
         video.muted = true;
@@ -35,7 +36,11 @@ function mute(){
 
 speaker.addEventListener('click', mute)
 
+} catch (err) {
+    console.log("error");
+}
 
+try {
 function playOrPause() {
 
     if (video.paused) {
@@ -46,15 +51,22 @@ function playOrPause() {
         video.pause();
         $("#playBtn").attr("src", "/Media/Play.png");
     }
+    }
+} catch (err) {
+    console.log("error");
 }
 
+try {
 function stop() {
     video.pause();
     video.currentTime = 0;
     progress.value = 0;
+    }
+} catch (err) {
+    console.log("error");
 }
 
-//try {
+try {
     console.log("onnistuu laittamaan eventlistenerin");
     stopBtn.addEventListener('click', stop);
 
@@ -75,9 +87,9 @@ progress.addEventListener('click', function (e) {
     video.currentTime = percent * video.duration;
     });
 
-//} catch (err) {
-//    console.log(err);
-//}
+} catch (err) {
+    console.log("error");
+}
 
 function convertTime(seconds) {
     let min = Math.floor(seconds / 60);

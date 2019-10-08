@@ -90,15 +90,19 @@ class App extends Component {
 
         const script = document.createElement("script");
         const jquery = document.createElement("script");
+        const script2 = document.createElement("script");
 
         script.src = "/Js/main.js";
         jquery.src = "/Js/jquery-1.10.2.min.js";
+        script2.src = "/Js/realoadScript.js";
 
         script.id = "vanillaJs";
 
         script.async = true;
+        script.async = true;
         jquery.async = true;
 
+        document.body.appendChild(script);
         document.body.appendChild(script);
         document.body.appendChild(jquery);
     }
@@ -109,21 +113,21 @@ class App extends Component {
         fetch('/jsonContent/videos.json').then((response) => {
             return response.json();
         }).then((json) => {
-            this.setState({ Videos: json});
-         //   console.log("Videos: ", this.state.Videos);
+            this.setState({ Videos: json });
+            //   console.log("Videos: ", this.state.Videos);
         }).
             then(() => {
                 this.setState({ renderSideWidget: true });
             }).then(() => {
 
                 const sideWidgetElement = document.querySelector(".sideWidget");
-                
-            //    sideWidgetElement.style.display = "none";
 
-                this.setState({ displayThumbnail: true});
-             //   this.changeVideo("");
+                //    sideWidgetElement.style.display = "none";
+
+                this.setState({ displayThumbnail: true });
+                //   this.changeVideo("");
                 this.startAsync();
-            })
+            });
     }
 
     renderVideoContainer() {
