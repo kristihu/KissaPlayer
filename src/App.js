@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { HashRouter as Router, Route } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router'
 import './App.css';
-import Page from './custom_videoplayer/video.html';
 import VideoContainer from './Components/VideoContainer';
 import Home from './Views/Home';
 import SideWidget from './Components/SideWidget';
@@ -36,17 +36,22 @@ class App extends Component {
             vidit: vidit,
             haku: '',
             renderSideWidget: false,
+            displayThumbnails: false,
             fetching: false,
-            lockAll: false,
+            renderVideoContainer: false,
+            sideWidgetStyle: {
+                "display": "none",
+                "backgroundColor": "red",
+            }
         };
         this.searchHandler = this.searchHandler.bind(this);
         this.changeVideo = this.changeVideo.bind(this);
-        this.changeVideo2 = this.changeVideo2.bind(this);
         this.thumbnail = this.thumbnail.bind(this);
         this.addSideWidget = this.addSideWidget.bind(this);
         this.hideVideo = this.hideVideo.bind(this);
         this.fetchData = this.fetchData.bind(this);
-        this.lockAll = this.lockAll.bind(this);
+        this.renderVideoContainer = this.renderVideoContainer.bind(this);
+        this.homePage = this.homePage.bind(this);
         console.log(this.state.vidit)
     }
     searchHandler(event){
@@ -79,21 +84,24 @@ class App extends Component {
             return response.json();
         }).then((json) => {
             this.setState({ Videos: json });
-            console.log(this.state);
-            
-            return json;
+
         }).
-            then((json) => {
-                for (let i = 0; i < json.length; i++) {
-                    //  this.thumbnail(json[i].Video);
-                }
+            then(() => {
                 this.setState({ renderSideWidget: true });
-            });
+            }).then(() => {
+
+                const sideWidgetElement = document.querySelector(".sideWidget");
+
+                sideWidgetElement.style.display = "none";
+
+                this.setState({ displayThumbnail: true});
+               // this.changeVideo("");
+            })
     }
 
-    lockAll() {
-        if (this.state.lockAll === false) {
-            this.setState({ fetching: true, lockAll: true });
+    renderVideoContainer() {
+        if (this.state.renderVideoContainer === false) {
+            this.setState({ renderVideoContainer: true });
         }
     }
 
@@ -111,15 +119,14 @@ class App extends Component {
     }
 
     addSideWidget() {
-        
-        console.log("Add sidewidget()",this.state.Videos);
+        console.log("add sideWidget()");
+
         for (let i = 0; i < this.state.Videos.length; i++) {
             const canvas = document.getElementById('canvas' + i);
             const video = document.getElementById(this.state.Videos[i].Video);
-           // console.log(video);
-          //  console.log(canvas);
+       //     console.log("video: ",video);
+       //     console.log("canvas: ",canvas);
             canvas.getContext('2d').drawImage(video, 0, 0, video.videoWidth / 8, video.videoHeight / 16);
-           // canvas.addEventListener('click', this.changeVideo(this.state.Videos[i].Video));
             
         }
         if (this.state.fetching === false) {
@@ -128,29 +135,40 @@ class App extends Component {
     }
 
     changeVideo(videoName) {
-        console.log("Videoname. ", videoName);
-        this.setState({ video: videoName });
-        return (
-            <Link to={`/${videoName}`} />
-        );
+
+        const sideWidgetElement = document.querySelector(".sideWidget");
+
+        sideWidgetElement.style.display = "block";
+
+        console.log("videoname " + videoName)
+        if (videoName !== "") {
+            console.log("videoName: ", videoName);
+            this.setState({ video: videoName }
+                , () => {
+                    console.log("App video: " + this.state.video);
+                    console.log(this.state.Videos);
+                },
+                () => {
+                    this.setState({ renderVideoContainer: true });
+                }
+            );
+        } else {
+            this.setState({ video: "" });
+            console.log("No video");
+        }
     }
 
-    changeVideo2() {
+    homePage() {
+        const sideWidgetElement = document.querySelector(".sideWidget");
 
-        this.setState({ video: "Cat Chilling.mp4" });
-        return (
-            <Link to={`/${this.state.video}`} />
-        );
+        sideWidgetElement.style.display = "none";
+        this.forceUpdate();
     }
+
 
     render() {
         const { haku, vidit } = this.state;
-      /*  
-        if (this.state.fetching === false) {
-            { this.fetchData() }
-        } else {
-           // {this.lockAll()}
-        }*/
+
         return (
             <React.Fragment>
                   {this.state.fetching === false &&
@@ -158,38 +176,32 @@ class App extends Component {
                     {this.fetchData()}
                     </React.Fragment>
                 } 
-                <form><input type="text"
-                             onChange={this.searchHandler}
-                            value={haku}/></form>
-                {
-                    vidit.filter(searchingFor(haku)).map( vidit =>
-                    <div><h3> {vidit.vidi}</h3></div>
-                    )
-                }
-                <h2>{this.state.video}</h2>
-                <h3>ebin</h3>
+
+
 
                 <Router>
                     <ul>
-                        <li><Link to="/" >Home</Link></li>
-                        <li><Link onClick={this.changeVideo} to={`/${this.state.video}`} >Pexels Videos</Link></li>
-                        <li> <Link onClick={this.changeVideo2} to={`/${this.state.video}`} >Looppivuori</Link></li>
+                        <li><Link onClick={() => this.homePage()} to="/" >Etusivu</Link></li>
+                        <li><Link onClick={() => this.changeVideo("")} to={`/${this.state.video}`} >Katso kissavideoita</Link></li>
                     </ul>
+                    <div className="sideWidget">
+                        <SideWidget style={this.state.sideWidgetStyle} Videos={this.state.Videos} changeVideo={this.changeVideo} />
+                        {this.state.renderSideWidget === true &&
+                            <div>
+                                {this.addSideWidget()}
+                            </div>
+                        }
+                    </div>
                     <Route exact path="/" render={(props) => (
                         <Home {...props} title={"home"} />
                     )} />
-                    <Route path={`/${this.state.video}`} render={(props) => (
-                        <VideoContainer {...props} video={this.state.video} />
-                    )} />
+                    {/*  {this.renderVideoContainer === true && */}
+                        <Route path={`/${this.state.video}`} render={(props) => (
+                            <VideoContainer {...props} video={this.state.video} />
+                     )} /> 
+              {/*   }*/}
                 </Router>
-                <div className="sideWidget">
-                    <SideWidget Videos={this.state.Videos} changeVideo={this.changeVideo} />
-                    {this.state.renderSideWidget === true &&
-                        <div>
-                        {this.addSideWidget()}   
-                        </div>
-                    }
-                </div>
+             
             </React.Fragment>
         );
     }

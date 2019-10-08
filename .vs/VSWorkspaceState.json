@@ -1,6 +1,10 @@
 {
   "ExpandedNodes": [
     "",
+    "\\public",
+    "\\public\\Js",
+    "\\public\\jsonContent",
+    "\\public\\Media",
     "\\src",
     "\\src\\Components",
     "\\src\\Views"

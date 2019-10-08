@@ -4,15 +4,10 @@ import style from '../custom_videoplayer/Main.css';
 
 var htmlDoc = { __html: Page };
 
+
 class VideoContainer extends Component {
 
     componentDidMount() {
-        const video = window.document.getElementById('myVideo');
-
-        if (this.props.video !== "") {
-            video.src = "/Media/" + this.props.video;
-       
-        console.log(video);
 
         const script = document.createElement("script");
 
@@ -22,12 +17,24 @@ class VideoContainer extends Component {
 
         document.body.appendChild(script);
 
-            this.forceUpdate();
-        }
+        this.forceUpdate();
+        
     }
 
+
     render() {
-        console.log("rendering .... " + this.props.video);
+        if (this.props.video !== "") {
+            console.log("rendering .... " + this.props.video);
+            const video = window.document.getElementById('myVideo');
+         //   console.log("video element; ", video);
+            try {
+                video.src = "/Media/" + this.props.video;
+            } catch (err) {
+                this.forceUpdate();
+                }
+        } else {
+           // console.log("ei renderöi .... ");
+        }
 		return (
             <div>
                 {this.props.video !== "" && 
