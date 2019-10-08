@@ -17,7 +17,7 @@ const fullscreen = document.getElementById('fs');
 
 const speaker = document.getElementById('speaker');
 
-speaker.addEventListener('click', mute)
+
 
 
 function mute(){
@@ -32,6 +32,8 @@ function mute(){
         $("#speaker").attr("src", "/Media/Speaker.png");
     }
 }
+
+speaker.addEventListener('click', mute)
 
 
 function playOrPause() {

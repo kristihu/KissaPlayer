@@ -31,7 +31,7 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            video: "No video yet",
+            video: "",
             Videos: [],
             vidit: vidit,
             haku: '',
@@ -136,8 +136,8 @@ class App extends Component {
         for (let i = 0; i < this.state.Videos.length; i++) {
             const canvas = document.getElementById('canvas' + i);
             const video = document.getElementById(this.state.Videos[i].Video);
-            console.log(video);
-            console.log(canvas);
+           // console.log(video);
+          //  console.log(canvas);
             canvas.getContext('2d').drawImage(video, 0, 0, video.videoWidth / 8, video.videoHeight / 16);
            // canvas.addEventListener('click', this.changeVideo(this.state.Videos[i].Video));
             
@@ -149,6 +149,7 @@ class App extends Component {
 
     changeVideo(videoName) {
         console.log("Videoname. ", videoName);
+        this.setState({ video: videoName });
         return (
             <Link to={`/${videoName}`} />
         );
@@ -156,7 +157,7 @@ class App extends Component {
 
     changeVideo2() {
 
-        this.setState({ video: "looppivuori.mp4" });
+        this.setState({ video: "Cat Chilling.mp4" });
         return (
             <Link to={`/${this.state.video}`} />
         );

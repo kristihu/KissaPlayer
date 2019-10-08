@@ -9,20 +9,10 @@ class VideoContainer extends Component {
     componentDidMount() {
         const video = window.document.getElementById('myVideo');
 
-        video.src = "/Media/"+this.props.video;
+        if (this.props.video !== "") {
+            video.src = "/Media/" + this.props.video;
+       
         console.log(video);
-        /*
-        const oldScript = document.getElementById("vanillaJs");
-        console.log(oldScript);
-        const body = document.getElementsByTagName('body')[0];
-        body.removeChild(oldScript);
-        
-        const script = document.createElement("script");
-        script.src = "/Js/main.js";
-        script.id = "vanillaJs";
-        script.async = true;
-        document.body.appendChild(script);
-        */
 
         const script = document.createElement("script");
 
@@ -32,15 +22,20 @@ class VideoContainer extends Component {
 
         document.body.appendChild(script);
 
-        this.forceUpdate();
+            this.forceUpdate();
+        }
     }
 
     render() {
         console.log("rendering .... " + this.props.video);
 		return (
             <div>
+                {this.props.video !== "" && 
+                    <React.Fragment>
                 <div style={style} dangerouslySetInnerHTML={htmlDoc} />
-                <h2>Video Container: {this.props.video}</h2> 
+                    <h2>Video Container: {this.props.video}</h2> 
+                </React.Fragment>
+                    }
             </div>
 			);
 	}
